@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WykazPodatnikow.Data\WykazPodatnikow.Data.csproj" />
+    <ProjectReference Include="..\WykazPodatnikow.SharedLib\WykazPodatnikow.SharedLib.csproj" />
+  </ItemGroup>
+
+</Project>
