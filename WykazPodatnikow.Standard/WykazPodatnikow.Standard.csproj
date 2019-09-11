@@ -1,7 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.2</Version>
+    <Authors>Marcel Garbarczyk</Authors>
+    <PackageLicenseFile>MIT License.txt</PackageLicenseFile>
+    <Description>Helper library to get data from Polish ministry of finance about VAT Taxpayer.
+Biblioteka do obsługi API Ministerstwa finansów - Biała lista podatników VAT.</Description>
+    <PackageProjectUrl>https://github.com/m4rcelpl/WykazPodatnikow</PackageProjectUrl>
+    <RepositoryType>.NET Standard 2.1</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +19,13 @@
   <ItemGroup>
     <ProjectReference Include="..\WykazPodatnikow.Data\WykazPodatnikow.Data.csproj" />
     <ProjectReference Include="..\WykazPodatnikow.SharedLib\WykazPodatnikow.SharedLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Asset\MIT License.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
