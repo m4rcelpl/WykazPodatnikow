@@ -132,8 +132,8 @@ namespace WykazPodatnikow.XUnitTest
         }
 
         [Theory]
-        [InlineData("74175010190000000011453438,11234567890,50109025900000000135521483", 3)]
-        public async Task GetDataFromBankAccounts_BadBAs(string bankaccounts, int ReturnCount)
+        [InlineData("74175010190000000011453438,11234567890,50109025900000000135521483")]
+        public async Task GetDataFromBankAccounts_BadBAs(string bankaccounts)
         {
             var result = await vatWhiteList.GetDataFromBankAccountsAsync(bankaccounts, DateTime.Now);
 
