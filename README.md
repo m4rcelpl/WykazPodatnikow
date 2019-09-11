@@ -9,6 +9,7 @@ Helper library to get data from Polish ministry of finance about VAT Taxpayer.
 Biblioteka jest udostępniona w dwóch wersjach:
 
 **.NET Core 3 library** - ta wersja korzysta z szybszego i wbudowanego w framework `System.Text.Json`
+
 **.NET Standard 2.1** - standardowa wersja korzystająca z `Newtonsoft.Json`
 
 # 🤝 Zgodność
