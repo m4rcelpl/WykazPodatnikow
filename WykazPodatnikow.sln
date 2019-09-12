@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29230.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WykazPodatnikow.Core", "WykazPodatnikow.CoreLib\WykazPodatnikow.Core.csproj", "{F7136EB7-F9E4-4CEB-92D0-2F4062A43906}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WykazPodatnikow.Core", "WykazPodatnikow.Core\WykazPodatnikow.Core.csproj", "{F7136EB7-F9E4-4CEB-92D0-2F4062A43906}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WykazPodatnikow.Data", "WykazPodatnikow.Data\WykazPodatnikow.Data.csproj", "{B930D736-6008-4E01-B9F2-C243210814A5}"
 EndProject
