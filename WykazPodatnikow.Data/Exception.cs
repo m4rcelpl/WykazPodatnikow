@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace BialaLista.data
+namespace WykazPodatnikow.Data
 {
     /// <summary>
     ///
