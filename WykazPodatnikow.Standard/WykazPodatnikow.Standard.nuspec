@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>WykazPodatnikow.Standard</id>
+    <version>1.0.3</version>
+    <authors>Marcel G.</authors>
+    <owners>Marcel G.</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">MIT License.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://github.com/m4rcelpl/WykazPodatnikow</projectUrl>
+    <description>Helper library to get data from Polish ministry of finance about VAT Taxpayer.
+Biblioteka do obsługi API Ministerstwa finansów - Biała lista podatników VAT.</description>
+<copyright>Marcel G.</copyright>
+    <repository type=".NET Standard 2.1" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="Newtonsoft.Json" version="12.0.2" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\m4rce\OneDrive\Programowanie\Git\WykazPodatnikow\Asset\MIT License.txt" target="MIT License.txt" />
+  </files>
+</package>
