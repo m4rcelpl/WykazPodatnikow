@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WykazPodatnikow.CoreLib\WykazPodatnikow.Core.csproj" />
+    <ProjectReference Include="..\WykazPodatnikow.Core\WykazPodatnikow.Core.csproj" />
     <ProjectReference Include="..\WykazPodatnikow.Data\WykazPodatnikow.Data.csproj" />
     <ProjectReference Include="..\WykazPodatnikow.Standard\WykazPodatnikow.Standard.csproj" />
   </ItemGroup>
