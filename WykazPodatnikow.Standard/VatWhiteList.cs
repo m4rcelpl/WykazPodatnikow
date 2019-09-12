@@ -1,10 +1,10 @@
-﻿using BialaLista.data;
+﻿using WykazPodatnikow.Data;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WykazPodatnikow.SharedLib;
-using Exception = BialaLista.data.Exception;
+using Exception = WykazPodatnikow.Data.Exception;
 
 namespace WykazPodatnikow.Standard
 {
