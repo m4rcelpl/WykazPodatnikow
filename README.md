@@ -8,26 +8,29 @@ Helper library to get data from Polish ministry of finance about VAT Taxpayer.
 
 Biblioteka jest udostępniona w dwóch wersjach:
 
-**.NET Core 3 library** - ta wersja korzysta z szybszego i wbudowanego w framework `System.Text.Json`
+[**.NET Core 3 library**](https://www.nuget.org/packages/WykazPodatnikow.Core/) - ta wersja korzysta z szybszego i wbudowanego w framework `System.Text.Json`
 
-**.NET Standard 2.1** - standardowa wersja korzystająca z `Newtonsoft.Json`
+[**.NET Standard 2.1**](https://www.nuget.org/packages/WykazPodatnikow.Standard/) - standardowa wersja korzystająca z `Newtonsoft.Json`
 
 # 🤝 Zgodność
 Cała struktura danych w przestrzeni nazw `BialaLista.data` - jest w 100% zgodna ze specyfikacją [opublikowaną przez ministerstwo.](https://wl-api.mf.gov.pl/) 
 
 # 👨‍💻 Jak korzystać
 
-Zainstaluj bibliotekę z menagera [NuGet](https://www.nuget.org/packages/PodatnicyVAT/).<br>
-`dotnet add package PodatnicyVAT`
+Zainstaluj bibliotekę z menagera NuGet.
+
+[WykazPodatnikow.Core](https://www.nuget.org/packages/WykazPodatnikow.Core/)<br>
+`dotnet add package WykazPodatnikow.Core`
+
+[WykazPodatnikow.Standard](https://www.nuget.org/packages/WykazPodatnikow.Standard/)<br>
+`dotnet add package WykazPodatnikow.Standard`
 
 Dodaj:<br>
 `using WykazPodatnikow.Core;`<br>
-
-lub 
-
+lub<br> 
 `using WykazPodatnikow.Standard;`<br>
 
-Następnie trzeba zainicjować klasę:
+Następnie zainicjuj klasę:
 
 Jako argument trzeba przekazać HttpClient, można dodać jako nową instancję:
 ``` csharp
