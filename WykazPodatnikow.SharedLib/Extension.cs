@@ -100,7 +100,7 @@ namespace WykazPodatnikow.SharedLib
                 var hashedInputStringBuilder = new System.Text.StringBuilder(128);
                 foreach (var b in hashedInputBytes)
                     hashedInputStringBuilder.Append(b.ToString("X2"));
-                return hashedInputStringBuilder.ToString();
+                return hashedInputStringBuilder.ToString().ToLower();
             }
         }
     }
