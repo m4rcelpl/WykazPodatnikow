@@ -8,7 +8,28 @@ namespace WykazPodatnikow.XUnitTest
 {
     public class CoreTest
     {
-        private VatWhiteList vatWhiteList = new VatWhiteList(new HttpClient());
+        private readonly VatWhiteList vatWhiteList;
+        private readonly VatWhiteListFlatFile vatWhiteListFlatFile;
+
+        public CoreTest()
+        {
+            try
+            {
+                vatWhiteList = new VatWhiteList(new HttpClient());
+                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"C:\Users\mgarbarczyk\Desktop\20191021.json");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while initialize vatWhiteList or vatWhiteListFlatFile. {ex.Message} | {ex.InnerException?.Message}");
+            }
+        }
+
+        [Theory]
+        [InlineData("4356579386", "49584845845845839967467456")]
+        public async Task GetDataFromNipFlatFile_GoodNip(string nip, string bankAccount)
+        {
+            Assert.True(vatWhiteListFlatFile.IsInFlatFile(nip, bankAccount));
+        }
 
         [Theory]
         [InlineData("6222468959")]
