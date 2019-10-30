@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using WykazPodatnikow.Data;
 using WykazPodatnikow.SharedLib;
 
-namespace WykazPodatnikow.Core
+namespace WykazPodatnikow.Standard
 {
     public class VatWhiteListFlatFile
     {
-        private JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly FlatFileData flatFileData;
 
         public VatWhiteListFlatFile(string PathToJson)
@@ -20,7 +21,7 @@ namespace WykazPodatnikow.Core
 
             try
             {
-                flatFileData = JsonSerializer.Deserialize<FlatFileData>(File.ReadAllText(PathToJson), JsonSerializerOptions);
+                flatFileData = JsonConvert.DeserializeObject<FlatFileData>(File.ReadAllText(PathToJson));
             }
             catch (System.Exception)
             {

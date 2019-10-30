@@ -2,7 +2,9 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WykazPodatnikow.Core;
+using WykazPodatnikow.Data;
 using Xunit;
+using Exception = System.Exception;
 
 namespace WykazPodatnikow.XUnitTest
 {
@@ -24,11 +26,16 @@ namespace WykazPodatnikow.XUnitTest
             }
         }
 
-        [Theory]
-        [InlineData("4356579386", "49584845845845839967467456")]
-        public async Task GetDataFromNipFlatFile_GoodNip(string nip, string bankAccount)
+        [Fact]
+        public void FoundInVirtualFlatFile()
         {
-            Assert.True(vatWhiteListFlatFile.IsInFlatFile(nip, bankAccount));
+            Assert.Equal(FlatFile.FoundInVirtual, vatWhiteListFlatFile.IsInFlatFile("4356579386", "20721233708680000022663112"));
+        }
+
+        [Fact]
+        public void FoundInRegularFlatFile()
+        {
+            Assert.Equal(FlatFile.FoundInRegular, vatWhiteListFlatFile.IsInFlatFile("1435721230", "34102012221314181237774212"));
         }
 
         [Theory]
