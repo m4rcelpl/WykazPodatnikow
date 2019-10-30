@@ -38,7 +38,7 @@ namespace WykazPodatnikow.Core
             string hash = (flatFileData.head.datagenerowaniadanych + nip + bankAccount).SHA512();
             foreach (var item in flatFileData.body)
             {
-                if (item.Equals(hash))
+                if (item.Equals(hash, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
