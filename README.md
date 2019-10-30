@@ -8,9 +8,9 @@ Helper library to get data from Polish ministry of finance about VAT Taxpayer.
 
 Biblioteka jest udostępniona w dwóch wersjach:
 
-[**.NET Core 3 library**](https://www.nuget.org/packages/WykazPodatnikow.Core/) - ta wersja korzysta z szybszego i wbudowanego w framework `System.Text.Json`
+[**.NET Core 3 library**](https://www.nuget.org/packages/WykazPodatnikow.Core/) - korzysta z szybszego i wbudowanego w framework `System.Text.Json`
 
-[**.NET Standard 2.1**](https://www.nuget.org/packages/WykazPodatnikow.Standard/) - standardowa wersja korzystająca z `Newtonsoft.Json`
+[**.NET Standard 2.1**](https://www.nuget.org/packages/WykazPodatnikow.Standard/) - standardowa wersja korzysta z `Newtonsoft.Json`
 
 # 🤝 Zgodność
 Cała struktura danych w przestrzeni nazw `BialaLista.data` - jest w 100% zgodna ze specyfikacją [opublikowaną przez ministerstwo.](https://wl-api.mf.gov.pl/) 
@@ -30,9 +30,57 @@ Dodaj:<br>
 lub<br> 
 `using WykazPodatnikow.Standard;`<br>
 
-Następnie zainicjuj klasę:
+Do dyspozycji mamy dwie klasy, pierwsza a nich o nazwie `VatWhiteListFlatFile` służy do sprawdzania czy para NIP + Nr. konta bankowego są obecnie w [pliku płaskim](https://www.gov.pl/web/kas/plik-plaski). Klasa przy inicjalizacji jako argument przyjmuje ścieżkę do pliku json którego należy pobrać wcześniej ze strony ministerstwa. Pamiętaj że dane w pliku są ważne tylko na dzień wystawienia pliku. Tak więc to jaki plik podasz determinuje dzień na jaki chcesz dokonać sprawdzenia. Klasa posiada tylko jedną metodę o nazwie `IsInFlatFile` która hashuje dane i sprawdza według specyfikacji. Metoda obsługuje również sprawdzanie rachunków wirtualnych, dzieje się to automatycznie. Metoda zwraca typ `FlatFile` który oznacz:
 
-Jako argument trzeba przekazać HttpClient, można dodać jako nową instancję:
+```csharp
+FlatFile.FoundInRegular //Para nip + numer konta została znaleziona jako konto standardowe
+FlatFile.FoundInVirtual //Para nip + numer konta została znaleziona po dopasowaniu wzorca jako konto wirtualne
+FlatFile.NotFound //Para nip + numer konta nie została odnaleziona w pliku
+```
+
+Ze względu na ograniczenia API, zaleca się najpierw sprawdzenie rachunku w pliku płaskim. Jeśli rachunek nie zostanie odnaleziony to można przejść do drugiej metody która zwraca już konkretne dane z bazy ministerstwa.
+
+Przykład:
+
+```csharp
+class CheckInFlatFile
+{
+    public CheckInFlatFile()
+    {
+        try
+        {
+            vatWhiteListFlatFile = new VatWhiteListFlatFile(@"C:\file\20191021.json");
+        }
+        catch (Exception)//Jeśli plik nie istnieje zostanie rzucony wyjątek
+        {
+            throw;
+        }
+    }
+
+    public void CheckInFlatFile()
+    {
+        FlatFile result = vatWhiteListFlatFile.IsInFlatFile("4356579386", "20721233708680000022663112");
+
+        switch (result)
+        {
+            case FlatFile.FoundInRegular:
+                //Znaleziono w pliku jako konto standardowe
+                break;
+            case FlatFile.FoundInVirtual:
+                //Znaleziono w pliku jako konto wirtualne
+                break;
+            case FlatFile.NotFound:
+                //Nie znaleziono w pliku można
+                break;
+            default:
+                break;
+        }
+    }
+}
+```
+
+Drugą klasą jest `VatWhiteList` która pobiera dane z API ministerstwa. Klasa przy inicjalizacji wymaga przekazania instancji `HttpClient`. Można to zrobić tworząc nową:
+
 ``` csharp
 var vatWhiteList = new VatWhiteList(new HttpClient());
 ```
@@ -56,7 +104,7 @@ public class SomeClass
 }
 ```
 
-Jako drugi argument można podać adres API. Domyślnie jest wpisany produkcyjny https://wl-api.mf.gov.pl Można go nadpisać testowym https://wl-test.mf.gov.pl:9091/wykaz-podatnikow/ lub zmodyfikować gdyby w przyszłości się zmienił. 
+Jako drugi argument można podać adres API. Domyślnie jest wpisany produkcyjny https://wl-api.mf.gov.pl Można go nadpisać testowym https://wl-test.mf.gov.pl:9091/wykaz-podatnikow/ lub zmodyfikować gdyby w przyszłości się zmienił.
 
 ```csharp
 var vatWhiteList = new VatWhiteList(new HttpClient(), "https://wl-test.mf.gov.pl:9091/wykaz-podatnikow/");
@@ -88,7 +136,7 @@ Wartość DateTime można podać przeszłą, np. `DateTime.Now.AddDays(-7)` - po
 Szczegółowy opis API można znaleźć na stronach ministerstwa: https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat
 
 ## 🧨 Uwaga
-Każda metoda musi być umieszczona w bloku `try...catch`. W przypadku problemów z serwerem zostanie rzucony wyjątek. W każdym innym przypadku błędy są zgłaszane w klasie `Exception`.
+Każda metoda musi być umieszczona w bloku `try...catch`. W przypadku problemów z serwerem zostanie rzucony wyjątek. W każdym innym przypadku błędy są zgłaszane w klasach:
 ```sharp
 EntityResponse.Exception 
 EntityListResponse.Exception
@@ -101,18 +149,49 @@ EntityCheckResponse.Exception
 # 📜 Pełny przykład
 
 ```csharp
- private static async System.Threading.Tasks.Task Main(string[] args)
+private static async System.Threading.Tasks.Task Main(string[] args)
         {
             string nip = "5270103391";
             string regon = "010016565";
             string bankaccount = "72103015080000000500217006";
+            VatWhiteList vatWhiteList = null;
+            VatWhiteListFlatFile vatWhiteListFlatFile = null;
 
             Console.WriteLine("Start!");
 
-            var vatWhiteList = new VatWhiteList(new HttpClient());
+            try
+            {
+                vatWhiteList = new VatWhiteList(new HttpClient());
+                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"c:\Users\m4rce\OneDrive\Programowanie\Git\WykazPodatnikow\WykazPodatnikow.XUnitTest\20191021.json");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while initialize vatWhiteList or vatWhiteListFlatFile. {ex.Message} | {ex.InnerException?.Message}");
+            }
 
             try
             {
+                Console.WriteLine("Sprawdzam firmę w pliku płaskim");
+
+                FlatFile result = vatWhiteListFlatFile.IsInFlatFile(nip, bankaccount);
+
+                switch (result)
+                {
+                    case FlatFile.FoundInRegular:
+                        Console.WriteLine("Konto bankowe zostało adnalezione w pliku płaskim");
+                        break;
+                    case FlatFile.FoundInVirtual:
+                        Console.WriteLine("Konto bankowe zostało adnalezione w pliku płaskim i jest to konto wirtualne");
+                        break;
+                    case FlatFile.NotFound:
+                        Console.WriteLine("Konto bankowe nie zostało odnalezione w pliku płaskim");
+                        break;
+                    default:
+                        break;
+                }
+
+                Console.WriteLine("Rozpoczynam sprawdzanie w API");
+                Console.WriteLine();
                 Console.WriteLine($"Sprawdzam firmę na podstawie NIP: {nip}");
                 var resultNip = await vatWhiteList.GetDataFromNipAsync(nip, DateTime.Now);
 
@@ -211,9 +290,6 @@ EntityCheckResponse.Exception
             }
 
             Console.ReadLine();
+
         }
 ```
-
- # 📝 To-Do
-
-* Dodanie obsługi szyfrowanego [pliku](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat).
