@@ -18,18 +18,18 @@ namespace WykazPodatnikow.XUnitTest
             try
             {
                 vatWhiteList = new VatWhiteList(new HttpClient());
-                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"C:\Users\mgarbarczyk\Desktop\20191021.json");
+                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"20191021.json");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error while initialize vatWhiteList or vatWhiteListFlatFile. {ex.Message} | {ex.InnerException?.Message}");
+                throw;
             }
         }
 
         [Fact]
         public void FoundInVirtualFlatFile()
         {
-            Assert.Equal(FlatFile.FoundInVirtual, vatWhiteListFlatFile.IsInFlatFile("6222468959", "92103011460000000086837021"));
+            Assert.Equal(FlatFile.FoundInVirtual, vatWhiteListFlatFile.IsInFlatFile("6222468959", "39114010100000777770001001"));
         }
 
         [Fact]
