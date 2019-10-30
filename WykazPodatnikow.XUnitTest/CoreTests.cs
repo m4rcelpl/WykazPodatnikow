@@ -29,13 +29,13 @@ namespace WykazPodatnikow.XUnitTest
         [Fact]
         public void FoundInVirtualFlatFile()
         {
-            Assert.Equal(FlatFile.FoundInVirtual, vatWhiteListFlatFile.IsInFlatFile("4356579386", "20721233708680000022663112"));
+            Assert.Equal(FlatFile.FoundInVirtual, vatWhiteListFlatFile.IsInFlatFile("6222468959", "92103011460000000086837021"));
         }
 
         [Fact]
         public void FoundInRegularFlatFile()
         {
-            Assert.Equal(FlatFile.FoundInRegular, vatWhiteListFlatFile.IsInFlatFile("1435721230", "34102012221314181237774212"));
+            Assert.Equal(FlatFile.FoundInRegular, vatWhiteListFlatFile.IsInFlatFile("6222468959", "92103011460000000086837021"));
         }
 
         [Theory]

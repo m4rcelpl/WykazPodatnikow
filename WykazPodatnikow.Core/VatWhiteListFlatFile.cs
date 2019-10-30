@@ -33,6 +33,9 @@ namespace WykazPodatnikow.Core
 
         public FlatFile IsInFlatFile(string nip, string bankAccount)
         {
+            if (!nip.IsValidNIP() || !Extension.IsValidBankAccountNumber(bankAccount))
+                return FlatFile.NotFound;
+
             if (CheckInBody(bankAccount))
                 return FlatFile.FoundInRegular;
 
