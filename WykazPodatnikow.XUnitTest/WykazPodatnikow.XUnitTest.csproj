@@ -19,4 +19,10 @@
     <ProjectReference Include="..\WykazPodatnikow.Standard\WykazPodatnikow.Standard.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="20191021.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

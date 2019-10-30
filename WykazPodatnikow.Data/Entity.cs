@@ -69,14 +69,14 @@ namespace WykazPodatnikow.Data
         /// </summary>
         /// <value>Imiona i nazwiska osób wchodzących w skład organu uprawnionego do reprezentowania podmiotu oraz ich numery NIP i/lub PESEL </value>
         [DataMember(Name = "representatives", EmitDefaultValue = false)]
-        public List<Person> Representatives { get; set; }
+        public List<EntityPerson> Representatives { get; set; }
 
         /// <summary>
         /// Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL
         /// </summary>
         /// <value>Imiona i nazwiska prokurentów oraz ich numery NIP i/lub PESEL </value>
         [DataMember(Name = "authorizedClerks", EmitDefaultValue = false)]
-        public List<Person> AuthorizedClerks { get; set; }
+        public List<EntityPerson> AuthorizedClerks { get; set; }
 
         /// <summary>
         /// Imiona i nazwiska lub firmę (nazwa) wspólnika oraz jego numeryNIP i/lub PESEL

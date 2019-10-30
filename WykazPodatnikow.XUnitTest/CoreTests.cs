@@ -2,13 +2,41 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WykazPodatnikow.Core;
+using WykazPodatnikow.Data;
 using Xunit;
+using Exception = System.Exception;
 
 namespace WykazPodatnikow.XUnitTest
 {
     public class CoreTest
     {
-        private VatWhiteList vatWhiteList = new VatWhiteList(new HttpClient());
+        private readonly VatWhiteList vatWhiteList;
+        private readonly VatWhiteListFlatFile vatWhiteListFlatFile;
+
+        public CoreTest()
+        {
+            try
+            {
+                vatWhiteList = new VatWhiteList(new HttpClient());
+                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"20191021.json");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [Fact]
+        public void FoundInVirtualFlatFile()
+        {
+            Assert.Equal(FlatFile.FoundInVirtual, vatWhiteListFlatFile.IsInFlatFile("6222468959", "39114010100000777770001001"));
+        }
+
+        [Fact]
+        public void FoundInRegularFlatFile()
+        {
+            Assert.Equal(FlatFile.FoundInRegular, vatWhiteListFlatFile.IsInFlatFile("6222468959", "92103011460000000086837021"));
+        }
 
         [Theory]
         [InlineData("6222468959")]
