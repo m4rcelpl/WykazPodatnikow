@@ -16,6 +16,8 @@ namespace WykazPodatnikow.Data
     public class Head
     {
         public string datagenerowaniadanych { get; set; }
+        public string liczbatransformacji { get; set; }
+        public string schemat { get; set; }
     }
 
 }
