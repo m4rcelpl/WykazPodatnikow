@@ -6,8 +6,10 @@ namespace WykazPodatnikow.Data
 {
     public enum FlatFile
     {
-        FoundInRegular,
-        FoundInVirtual,
+        FoundInActiveVatPayer,
+        FoundInExemptVatPayer,
+        InvalidNip,
+        InvalidBankAccount,
         NotFound
     }
 }

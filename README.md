@@ -33,8 +33,10 @@ lub<br>
 Do dyspozycji mamy dwie klasy, pierwsza a nich o nazwie `VatWhiteListFlatFile` służy do sprawdzania czy para NIP + Nr. konta bankowego są obecnie w [pliku płaskim](https://www.gov.pl/web/kas/plik-plaski). Klasa przy inicjalizacji jako argument przyjmuje ścieżkę do pliku json którego należy pobrać wcześniej ze strony ministerstwa. Pamiętaj że dane w pliku są ważne tylko na dzień wystawienia pliku. Tak więc to jaki plik podasz determinuje dzień na jaki chcesz dokonać sprawdzenia. Klasa posiada tylko jedną metodę o nazwie `IsInFlatFile` która hashuje dane i sprawdza według specyfikacji. Metoda obsługuje również sprawdzanie rachunków wirtualnych, dzieje się to automatycznie. Metoda zwraca typ `FlatFile` który oznacz:
 
 ```csharp
-FlatFile.FoundInRegular //Para nip + numer konta została znaleziona jako konto standardowe
-FlatFile.FoundInVirtual //Para nip + numer konta została znaleziona po dopasowaniu wzorca jako konto wirtualne
+FlatFile.FoundInActiveVatPayer //Para nip + numer konta została znaleziona na liście czynnych podatników VAT
+FlatFile.FoundInExemptVatPayer //Para nip + numer konta została znaleziona na liście podatników VAT zwolnionych
+FlatFile.InvalidNip //Podany NIP nie ma poprawnego formatu
+FlatFile.InvalidBankAccount //Podane konto bankowe nie ma poprawnego formatu
 FlatFile.NotFound //Para nip + numer konta nie została odnaleziona w pliku
 ```
 
@@ -62,19 +64,25 @@ class CheckInFlatFile
         FlatFile result = vatWhiteListFlatFile.IsInFlatFile("4356579386", "20721233708680000022663112");
 
         switch (result)
-        {
-            case FlatFile.FoundInRegular:
-                //Znaleziono w pliku jako konto standardowe
-                break;
-            case FlatFile.FoundInVirtual:
-                //Znaleziono w pliku jako konto wirtualne
-                break;
-            case FlatFile.NotFound:
-                //Nie znaleziono w pliku można
-                break;
-            default:
-                break;
-        }
+            {
+                case FlatFile.FoundInActiveVatPayer:
+                    //Znaleziono na liście czynnych podatników VAT
+                    break;
+                case FlatFile.FoundInExemptVatPayer:
+                    //Znaleziono na liście zwolnionych podatników VAT
+                    break;
+                case FlatFile.InvalidNip:
+                    //Nieprawidłowy format numeru NIP
+                    break;
+                case FlatFile.InvalidBankAccount:
+                    //Nieprawidłowy format konta bankowego
+                    break;
+                case FlatFile.NotFound:
+                    //Pary NIP + Numer konta nie odnaleziono w pliku płaskim
+                    break;
+                default:
+                    break;
+            }
     }
 }
 ```
@@ -175,20 +183,26 @@ private static async System.Threading.Tasks.Task Main(string[] args)
 
                 FlatFile result = vatWhiteListFlatFile.IsInFlatFile(nip, bankaccount);
 
-                switch (result)
-                {
-                    case FlatFile.FoundInRegular:
-                        Console.WriteLine("Konto bankowe zostało adnalezione w pliku płaskim");
-                        break;
-                    case FlatFile.FoundInVirtual:
-                        Console.WriteLine("Konto bankowe zostało adnalezione w pliku płaskim i jest to konto wirtualne");
-                        break;
-                    case FlatFile.NotFound:
-                        Console.WriteLine("Konto bankowe nie zostało odnalezione w pliku płaskim");
-                        break;
-                    default:
-                        break;
-                }
+            switch (result)
+            {
+                case FlatFile.FoundInActiveVatPayer:
+                    Console.WriteLine("Znaleziono na liście czynnych podatników VAT");
+                    break;
+                case FlatFile.FoundInExemptVatPayer:
+                    Console.WriteLine("Znaleziono na liście zwolnionych podatników VAT");
+                    break;
+                case FlatFile.InvalidNip:
+                    Console.WriteLine("Nieprawidłowy format numeru NIP");
+                    break;
+                case FlatFile.InvalidBankAccount:
+                    Console.WriteLine("Nieprawidłowy format konta bankoweg");
+                    break;
+                case FlatFile.NotFound:
+                    Console.WriteLine("Pary NIP + Numer konta nie odnaleziono w pliku płaskim");
+                    break;
+                default:
+                    break;
+            }
 
                 Console.WriteLine("Rozpoczynam sprawdzanie w API");
                 Console.WriteLine();

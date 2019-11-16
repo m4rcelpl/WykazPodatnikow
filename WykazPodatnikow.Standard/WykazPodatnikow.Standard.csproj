@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.5</Version>
+    <Version>1.6</Version>
     <Authors>Marcel Garbarczyk</Authors>
     <PackageLicenseFile>MIT License.txt</PackageLicenseFile>
     <Description>Helper library to get data from Polish ministry of finance about VAT Taxpayer.

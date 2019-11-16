@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="20191018.JSON">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="20191021.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

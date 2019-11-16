@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace WykazPodatnikow.Data
 {
-
     public class FlatFileData
     {
-        public Head head { get; set; }
-        public List<string> body { get; set; }
-        public List<string> masks { get; set; }
+        public Naglowek naglowek { get; set; }
+        public List<string> skrotypodatnikowczynnych { get; set; }
+        public List<string> skrotypodatnikowzwolnionych { get; set; }
+        public List<string> maski { get; set; }
     }
 
-    public class Head
+    public class Naglowek
     {
         public string datagenerowaniadanych { get; set; }
         public string liczbatransformacji { get; set; }
         public string schemat { get; set; }
     }
-
 }

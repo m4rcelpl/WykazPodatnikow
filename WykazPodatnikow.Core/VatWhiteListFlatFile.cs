@@ -10,7 +10,7 @@ namespace WykazPodatnikow.Core
 {
     public class VatWhiteListFlatFile
     {
-        private JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = new NamingPolicy()};
         private readonly FlatFileData flatFileData;
 
         public VatWhiteListFlatFile(string PathToJson)
@@ -27,22 +27,43 @@ namespace WykazPodatnikow.Core
                 throw;
             }
 
-            if (string.IsNullOrEmpty(flatFileData.head.datagenerowaniadanych))
+            if (string.IsNullOrEmpty(flatFileData.naglowek.datagenerowaniadanych))
                 throw new System.Exception("Invalide Json file, datagenerowaniadanych is empty");
         }
 
         public FlatFile IsInFlatFile(string nip, string bankAccount)
         {
-            if (!nip.IsValidNIP() || !Extension.IsValidBankAccountNumber(bankAccount))
-                return FlatFile.NotFound;
+            if (!nip.IsValidNIP())
+                return FlatFile.InvalidNip;
 
-            if (CheckInBody(bankAccount))
-                return FlatFile.FoundInRegular;
+            if (!Extension.IsValidBankAccountNumber(bankAccount))
+                return FlatFile.InvalidBankAccount;
+
+            switch (CheckInBody(bankAccount))
+            {
+                case FlatFile.FoundInActiveVatPayer:
+                    return FlatFile.FoundInActiveVatPayer;
+
+                case FlatFile.FoundInExemptVatPayer:
+                    return FlatFile.FoundInExemptVatPayer;
+
+                case FlatFile.InvalidNip:
+                    return FlatFile.InvalidNip;
+
+                case FlatFile.InvalidBankAccount:
+                    return FlatFile.InvalidBankAccount;
+
+                case FlatFile.NotFound:
+                    break;
+
+                default:
+                    break;
+            }
 
             string bankBranchNumber = bankAccount.Substring(2, 8);
             string maskToCompare = string.Empty;
 
-            foreach (var item in flatFileData.masks)
+            foreach (var item in flatFileData.maski)
             {
                 if (bankBranchNumber.Equals(item.Substring(2, 8), StringComparison.OrdinalIgnoreCase))
                 {
@@ -58,24 +79,37 @@ namespace WykazPodatnikow.Core
             int range = maskToCompare.Count(p => p.Equals('Y'));
             string VirtualAccount = Regex.Replace(maskToCompare, "Y.Y", bankAccount.Substring(IndexFrom, range));
 
-            if (CheckInBody(VirtualAccount))
-                return FlatFile.FoundInVirtual;
-            else
-                return FlatFile.NotFound;
-
-            bool CheckInBody(string account)
+            return (CheckInBody(VirtualAccount)) switch
             {
-                string hash = (flatFileData.head.datagenerowaniadanych + nip + account).SHA512();
+                FlatFile.FoundInActiveVatPayer => FlatFile.FoundInActiveVatPayer,
+                FlatFile.FoundInExemptVatPayer => FlatFile.FoundInExemptVatPayer,
+                FlatFile.InvalidNip => FlatFile.InvalidNip,
+                FlatFile.InvalidBankAccount => FlatFile.InvalidBankAccount,
+                FlatFile.NotFound => FlatFile.NotFound,
+                _ => FlatFile.NotFound,
+            };
 
-                foreach (var item in flatFileData.body)
+            FlatFile CheckInBody(string account)
+            {
+                string hash = (flatFileData.naglowek.datagenerowaniadanych + nip + account).SHA512();
+
+                foreach (var item in flatFileData.skrotypodatnikowczynnych)
                 {
                     if (item.Equals(hash, StringComparison.OrdinalIgnoreCase))
                     {
-                        return true;
+                        return FlatFile.FoundInActiveVatPayer;
                     }
                 }
 
-                return false;
+                foreach (var item in flatFileData.skrotypodatnikowzwolnionych)
+                {
+                    if (item.Equals(hash, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return FlatFile.FoundInExemptVatPayer;
+                    }
+                }
+
+                return FlatFile.NotFound;
             }
         }
     }

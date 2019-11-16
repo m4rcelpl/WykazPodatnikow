@@ -18,24 +18,36 @@ namespace WykazPodatnikow.XUnitTest
             try
             {
                 vatWhiteList = new VatWhiteList(new HttpClient());
-                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"20191021.json");
+                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"20191018.JSON");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error while initialize vatWhiteList or vatWhiteListFlatFile. {ex.Message} | {ex.InnerException?.Message}");
+                throw;
             }
         }
 
         [Fact]
-        public void FoundInVirtualFlatFile()
+        public void FoundInActiveVatPayer_FlatFile()
         {
-            Assert.Equal(FlatFile.FoundInVirtual, vatWhiteListFlatFile.IsInFlatFile("4356579386", "20721233708680000022663112"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("6222468959", "39114010100000777770001001"));
         }
 
         [Fact]
-        public void FoundInRegularFlatFile()
+        public void FoundInExemptVatPayer_FlatFile()
         {
-            Assert.Equal(FlatFile.FoundInRegular, vatWhiteListFlatFile.IsInFlatFile("1435721230", "34102012221314181237774212"));
+            Assert.Equal(FlatFile.FoundInExemptVatPayer, vatWhiteListFlatFile.IsInFlatFile("6222468959", "92103011460000000086837021"));
+        }
+
+        [Fact]
+        public void InvalidNip_FlatFile()
+        {
+            Assert.Equal(FlatFile.InvalidNip, vatWhiteListFlatFile.IsInFlatFile("0002468959", "92103011460000000086837021"));
+        }
+
+        [Fact]
+        public void InvalidBankAccount_FlatFile()
+        {
+            Assert.Equal(FlatFile.InvalidBankAccount, vatWhiteListFlatFile.IsInFlatFile("6222468959", "000011460000000086837021"));
         }
 
         [Theory]
