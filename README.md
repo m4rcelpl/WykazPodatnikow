@@ -47,6 +47,8 @@ Przykład:
 ```csharp
 class CheckInFlatFile
 {
+    private readonly VatWhiteListFlatFile vatWhiteListFlatFile;
+    
     public CheckInFlatFile()
     {
         try
