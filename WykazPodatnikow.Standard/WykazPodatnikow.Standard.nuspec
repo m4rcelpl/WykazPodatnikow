@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>WykazPodatnikow.Standard</id>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <authors>Marcel G.</authors>
     <owners>Marcel G.</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,7 +11,7 @@
     <projectUrl>https://github.com/m4rcelpl/WykazPodatnikow</projectUrl>
     <description>Helper library to get data from Polish ministry of finance about VAT Taxpayer.
 Biblioteka do obsługi API Ministerstwa finansów - Biała lista podatników VAT.</description>
-<copyright>Marcel G.</copyright>
+    <copyright>Marcel G.</copyright>
     <repository type=".NET Standard 2.1" />
     <dependencies>
       <group targetFramework=".NETStandard2.1">
