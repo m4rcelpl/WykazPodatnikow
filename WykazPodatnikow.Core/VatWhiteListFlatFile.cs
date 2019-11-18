@@ -10,7 +10,7 @@ namespace WykazPodatnikow.Core
 {
     public class VatWhiteListFlatFile
     {
-        private readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = new NamingPolicy()};
+        private readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = new NamingPolicy() };
         private readonly FlatFileData flatFileData;
 
         public VatWhiteListFlatFile(string PathToJson)
@@ -27,7 +27,7 @@ namespace WykazPodatnikow.Core
                 throw;
             }
 
-            if(flatFileData == null)
+            if (flatFileData == null)
                 throw new System.Exception("Deserialize error, check if Json file is valide");
 
             if (string.IsNullOrEmpty(flatFileData.naglowek?.datagenerowaniadanych))

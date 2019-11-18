@@ -40,7 +40,7 @@ namespace WykazPodatnikow.Standard
                 throw new System.Exception("Invalide Json file, skrotypodatnikowczynnych is empty");
 
             if (flatFileData.skrotypodatnikowzwolnionych == null || flatFileData.skrotypodatnikowzwolnionych.Count <= 0)
-                throw new System.Exception("Invalide Json file, skrotypodatnikowzwolnionych is empty"); ;
+                throw new System.Exception("Invalide Json file, skrotypodatnikowzwolnionych is empty");
         }
 
         public FlatFile IsInFlatFile(string nip, string bankAccount)
