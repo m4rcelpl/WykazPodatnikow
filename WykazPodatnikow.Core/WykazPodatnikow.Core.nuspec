@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>WykazPodatnikow.Core</id>
-    <version>1.0.5</version>
+    <version>1.0.7</version>
     <authors>Marcel G.</authors>
     <owners>Marcel G.</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,6 +16,6 @@ Biblioteka do obsługi API Ministerstwa finansów - Biała lista podatników VAT
     <repository type=".NET Core Library" />
   </metadata>
     <files>
-    <file src="C:\Users\m4rce\OneDrive\Programowanie\Git\WykazPodatnikow\Asset\MIT License.txt" target="MIT License.txt" />
+    <file src="..\Asset\MIT License.txt" target="MIT License.txt" />
   </files>
 </package>
