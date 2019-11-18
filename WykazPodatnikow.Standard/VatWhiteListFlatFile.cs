@@ -27,8 +27,20 @@ namespace WykazPodatnikow.Standard
                 throw;
             }
 
-            if (string.IsNullOrEmpty(flatFileData.naglowek.datagenerowaniadanych))
+            if (flatFileData == null)
+                throw new System.Exception("Deserialize error, check if Json file is valide");
+
+            if (string.IsNullOrEmpty(flatFileData.naglowek?.datagenerowaniadanych))
                 throw new System.Exception("Invalide Json file, datagenerowaniadanych is empty");
+
+            if (flatFileData.maski == null || flatFileData.maski.Count <= 0)
+                throw new System.Exception("Invalide Json file, maski is empty");
+
+            if (flatFileData.skrotypodatnikowczynnych == null || flatFileData.skrotypodatnikowczynnych.Count <= 0)
+                throw new System.Exception("Invalide Json file, skrotypodatnikowczynnych is empty");
+
+            if (flatFileData.skrotypodatnikowzwolnionych == null || flatFileData.skrotypodatnikowzwolnionych.Count <= 0)
+                throw new System.Exception("Invalide Json file, skrotypodatnikowzwolnionych is empty"); ;
         }
 
         public FlatFile IsInFlatFile(string nip, string bankAccount)
