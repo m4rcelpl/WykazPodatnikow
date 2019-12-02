@@ -349,3 +349,5 @@ healthchecksdb
 MigrationBackup/
 .vscode/tasks.json
 .vscode/launch.json
+WykazPodatnikow.XUnitTest/20191121.json
+WykazPodatnikow.XUnitTest/20191202.json
