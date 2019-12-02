@@ -11,7 +11,6 @@ namespace WykazPodatnikow.Standard
     public class VatWhiteListFlatFile
     {
         private readonly FlatFileData flatFileData;
-        private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new NamingPolicy() };
 
         public VatWhiteListFlatFile(string PathToJson)
         {
@@ -20,7 +19,7 @@ namespace WykazPodatnikow.Standard
 
             try
             {
-                flatFileData = JsonConvert.DeserializeObject<FlatFileData>(File.ReadAllText(PathToJson), jsonSerializerSettings);
+                flatFileData = JsonConvert.DeserializeObject<FlatFileData>(File.ReadAllText(PathToJson));
             }
             catch (System.Exception)
             {
@@ -115,6 +114,11 @@ namespace WykazPodatnikow.Standard
             FlatFile CheckInBody(string account)
             {
                 string hash = (flatFileData.naglowek.datagenerowaniadanych + nip + account).SHA512();
+
+                for (int i = 0; i < 4999; i++)
+                {
+                    hash = hash.SHA512();
+                }
 
                 foreach (var item in flatFileData.skrotypodatnikowczynnych)
                 {

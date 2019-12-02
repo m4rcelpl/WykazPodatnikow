@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -10,7 +11,7 @@ namespace WykazPodatnikow.Core
 {
     public class VatWhiteListFlatFile
     {
-        private readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = new NamingPolicy() };
+        private readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true};
         private readonly FlatFileData flatFileData;
 
         public VatWhiteListFlatFile(string PathToJson)
@@ -104,6 +105,11 @@ namespace WykazPodatnikow.Core
             FlatFile CheckInBody(string account)
             {
                 string hash = (flatFileData.naglowek.datagenerowaniadanych + nip + account).SHA512();
+
+                for (int i = 0; i < 4999; i++)
+                {
+                    hash = hash.SHA512();
+                }
 
                 foreach (var item in flatFileData.skrotypodatnikowczynnych)
                 {
