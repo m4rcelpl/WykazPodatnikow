@@ -10,7 +10,7 @@ namespace WykazPodatnikow.Core
 {
     public class VatWhiteListFlatFile
     {
-        private readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true};
+        private readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly FlatFileData flatFileData;
 
         public VatWhiteListFlatFile(string PathToJson)
@@ -104,6 +104,12 @@ namespace WykazPodatnikow.Core
             FlatFile CheckInBody(string account)
             {
                 string hash = (flatFileData.naglowek.datagenerowaniadanych + nip + account).SHA512();
+                int liczbatransformacji = Convert.ToInt32(flatFileData.naglowek.liczbatransformacji) - 1;
+
+                for (int i = 0; i < liczbatransformacji; i++)
+                {
+                    hash.SHA512();
+                }
 
                 foreach (var item in flatFileData.skrotypodatnikowczynnych)
                 {

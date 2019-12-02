@@ -114,6 +114,12 @@ namespace WykazPodatnikow.Standard
             FlatFile CheckInBody(string account)
             {
                 string hash = (flatFileData.naglowek.datagenerowaniadanych + nip + account).SHA512();
+                int liczbatransformacji = Convert.ToInt32(flatFileData.naglowek.liczbatransformacji) - 1;
+
+                for (int i = 0; i < liczbatransformacji; i++)
+                {
+                    hash.SHA512();
+                }
 
                 foreach (var item in flatFileData.skrotypodatnikowczynnych)
                 {
