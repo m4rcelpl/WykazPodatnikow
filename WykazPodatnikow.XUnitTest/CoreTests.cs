@@ -29,25 +29,34 @@ namespace WykazPodatnikow.XUnitTest
         [Fact]
         public void FoundInActiveVatPayer_FlatFile()
         {
-            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("6222468959", "39114010100000777770001001"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("9810000054", "70102035709724546729803218"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1120000322", "83249000054243980827278527"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1120000428", "89926400093578089389446762"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1810004094", "39102055610000370202959088"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1810004094", "19102055612143765789973554"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1810004094", "38102055610000320209756141"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1810004094", "29102055614444789887664831"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1810004094", "23102055610000340209684145"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1130013160", "57102010550000910200159426"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1130013160", "53102011560000740200072686"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1130013160", "31102011560000730200166736"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("5838154651", "63102011560000710200483933"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("5838154651", "24102055610000360209622046"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("9889982762", "63102011560000710200483933"));
+            Assert.Equal(FlatFile.FoundInActiveVatPayer, vatWhiteListFlatFile.IsInFlatFile("1810004094", "17102055612150976534289857"));
         }
 
         [Fact]
         public void FoundInExemptVatPayer_FlatFile()
         {
-            Assert.Equal(FlatFile.FoundInExemptVatPayer, vatWhiteListFlatFile.IsInFlatFile("6222468959", "92103011460000000086837021"));
+            Assert.Equal(FlatFile.FoundInExemptVatPayer, vatWhiteListFlatFile.IsInFlatFile("1120000411", "33144010558221640315760086"));
+            Assert.Equal(FlatFile.FoundInExemptVatPayer, vatWhiteListFlatFile.IsInFlatFile("1120000351", "98124062349989896801925550"));
         }
 
         [Fact]
         public void InvalidNip_FlatFile()
         {
             Assert.Equal(FlatFile.InvalidNip, vatWhiteListFlatFile.IsInFlatFile("0002468959", "92103011460000000086837021"));
-        }
-
-        [Fact]
-        public void InvalidBankAccount_FlatFile()
-        {
-            Assert.Equal(FlatFile.InvalidBankAccount, vatWhiteListFlatFile.IsInFlatFile("6222468959", "000011460000000086837021"));
         }
 
         [Theory]

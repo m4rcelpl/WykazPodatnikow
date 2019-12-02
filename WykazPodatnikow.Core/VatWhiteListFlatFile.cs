@@ -48,9 +48,6 @@ namespace WykazPodatnikow.Core
             if (!nip.IsValidNIP())
                 return FlatFile.InvalidNip;
 
-            if (!Extension.IsValidBankAccountNumber(bankAccount))
-                return FlatFile.InvalidBankAccount;
-
             switch (CheckInBody(bankAccount))
             {
                 case FlatFile.FoundInActiveVatPayer:
@@ -89,7 +86,7 @@ namespace WykazPodatnikow.Core
 
             int IndexFrom = maskToCompare.IndexOf("Y");
             int range = maskToCompare.Count(p => p.Equals('Y'));
-            string VirtualAccount = Regex.Replace(maskToCompare, "Y.Y", bankAccount.Substring(IndexFrom, range));
+            string VirtualAccount = Regex.Replace(maskToCompare, "Y..Y", bankAccount.Substring(IndexFrom, range));
 
             return (CheckInBody(VirtualAccount)) switch
             {
@@ -108,7 +105,7 @@ namespace WykazPodatnikow.Core
 
                 for (int i = 0; i < liczbatransformacji; i++)
                 {
-                    hash.SHA512();
+                    hash = hash.SHA512();
                 }
 
                 foreach (var item in flatFileData.skrotypodatnikowczynnych)
