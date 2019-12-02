@@ -85,7 +85,7 @@ namespace WykazPodatnikow.Standard
 
             int IndexFrom = maskToCompare.IndexOf("Y");
             int range = maskToCompare.Count(p => p.Equals('Y'));
-            string VirtualAccount = Regex.Replace(maskToCompare, "Y..Y", bankAccount.Substring(IndexFrom, range));
+            string VirtualAccount = Regex.Replace(maskToCompare, "Y\\w*Y", bankAccount.Substring(IndexFrom, range));
 
             switch (CheckInBody(VirtualAccount))
             {
