@@ -18,7 +18,7 @@ namespace WykazPodatnikow.XUnitTest
             try
             {
                 vatWhiteList = new VatWhiteList(new HttpClient());
-                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"20191018.JSON");
+                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"20191121.json");
             }
             catch (Exception)
             {
