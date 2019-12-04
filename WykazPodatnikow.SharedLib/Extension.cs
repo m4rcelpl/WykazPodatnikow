@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace WykazPodatnikow.SharedLib
 {
@@ -100,6 +101,28 @@ namespace WykazPodatnikow.SharedLib
                 var hashedInputStringBuilder = new System.Text.StringBuilder(128);
                 foreach (var b in hashedInputBytes)
                     hashedInputStringBuilder.Append(b.ToString("X2"));
+                return hashedInputStringBuilder.ToString().ToLower();
+            }
+        }
+
+        public static string SHA512(this string input, int HowMenyReHash)
+        {
+            var hashedInputStringBuilder = new System.Text.StringBuilder(128);
+
+            using (var hash = System.Security.Cryptography.SHA512.Create())
+            {
+                var hashedInputBytes = hash.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
+
+                for (int i = 0; i < HowMenyReHash; i++)
+                {
+                    hashedInputStringBuilder.Clear();
+
+                    foreach (var b in hashedInputBytes)
+                        hashedInputStringBuilder.Append(b.ToString("X2"));
+
+                    hashedInputBytes = hash.ComputeHash(System.Text.Encoding.UTF8.GetBytes(hashedInputStringBuilder.ToString().ToLower()));
+                }
+
                 return hashedInputStringBuilder.ToString().ToLower();
             }
         }

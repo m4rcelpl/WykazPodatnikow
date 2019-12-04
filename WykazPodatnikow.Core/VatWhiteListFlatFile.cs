@@ -47,6 +47,9 @@ namespace WykazPodatnikow.Core
 
         public FlatFile IsInFlatFile(string nip, string bankAccount)
         {
+            if (flatFileData.skrotypodatnikowczynnych == null || flatFileData.skrotypodatnikowczynnych.Count <= 0)
+                throw new System.Exception("Json file is not loaded. Use first LoadFlatFileAsync()");
+
             if (!nip.IsValidNIP())
                 return FlatFile.InvalidNip;
 
@@ -102,13 +105,7 @@ namespace WykazPodatnikow.Core
 
             FlatFile CheckInBody(string account)
             {
-                string hash = (flatFileData.naglowek.datagenerowaniadanych + nip + account).SHA512();
-                int liczbatransformacji = Convert.ToInt32(flatFileData.naglowek.liczbatransformacji) - 1;
-
-                for (int i = 0; i < liczbatransformacji; i++)
-                {
-                    hash = hash.SHA512();
-                }
+                string hash = (flatFileData.naglowek.datagenerowaniadanych + nip + account).SHA512(Convert.ToInt32(flatFileData.naglowek.liczbatransformacji));
 
                 foreach (var item in flatFileData.skrotypodatnikowczynnych)
                 {
