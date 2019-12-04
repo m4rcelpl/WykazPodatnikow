@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using WykazPodatnikow.Data;
 using WykazPodatnikow.SharedLib;
 
@@ -10,36 +11,48 @@ namespace WykazPodatnikow.Standard
 {
     public class VatWhiteListFlatFile
     {
-        private readonly FlatFileData flatFileData;
+        private static FlatFileData flatFileData;
 
-        public VatWhiteListFlatFile(string PathToJson)
+        public static Task LoadFlatFileAsync(string PathToJson)
         {
-            if (!File.Exists(PathToJson))
-                throw new System.Exception("Json file not found");
-
-            try
+            Task task = Task.Run(() =>
             {
-                flatFileData = JsonConvert.DeserializeObject<FlatFileData>(File.ReadAllText(PathToJson));
-            }
-            catch (System.Exception)
-            {
-                throw;
-            }
+                if (!File.Exists(PathToJson))
+                    throw new System.Exception("Json file not found");
 
-            if (flatFileData == null)
-                throw new System.Exception("Deserialize error, check if Json file is valide");
+                try
+                {
+                    using (FileStream s = new FileStream(PathToJson, FileMode.Open, FileAccess.Read))
+                    using (StreamReader sr = new StreamReader(s))
+                    using (JsonReader reader = new JsonTextReader(sr))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
 
-            if (string.IsNullOrEmpty(flatFileData.naglowek?.datagenerowaniadanych))
-                throw new System.Exception("Invalide Json file, datagenerowaniadanych is empty");
+                        flatFileData = serializer.Deserialize<FlatFileData>(reader);
+                    }
+                }
+                catch (System.Exception)
+                {
+                    throw;
+                }
 
-            if (flatFileData.maski == null || flatFileData.maski.Count <= 0)
-                throw new System.Exception("Invalide Json file, maski is empty");
+                if (flatFileData == null)
+                    throw new System.Exception("Deserialize error, check if Json file is valide");
 
-            if (flatFileData.skrotypodatnikowczynnych == null || flatFileData.skrotypodatnikowczynnych.Count <= 0)
-                throw new System.Exception("Invalide Json file, skrotypodatnikowczynnych is empty");
+                if (string.IsNullOrEmpty(flatFileData.naglowek?.datagenerowaniadanych))
+                    throw new System.Exception("Invalide Json file, datagenerowaniadanych is empty");
 
-            if (flatFileData.skrotypodatnikowzwolnionych == null || flatFileData.skrotypodatnikowzwolnionych.Count <= 0)
-                throw new System.Exception("Invalide Json file, skrotypodatnikowzwolnionych is empty");
+                if (flatFileData.maski == null || flatFileData.maski.Count <= 0)
+                    throw new System.Exception("Invalide Json file, maski is empty");
+
+                if (flatFileData.skrotypodatnikowczynnych == null || flatFileData.skrotypodatnikowczynnych.Count <= 0)
+                    throw new System.Exception("Invalide Json file, skrotypodatnikowczynnych is empty");
+
+                if (flatFileData.skrotypodatnikowzwolnionych == null || flatFileData.skrotypodatnikowzwolnionych.Count <= 0)
+                    throw new System.Exception("Invalide Json file, skrotypodatnikowzwolnionych is empty");
+            });
+
+            return task;
         }
 
         public FlatFile IsInFlatFile(string nip, string bankAccount)

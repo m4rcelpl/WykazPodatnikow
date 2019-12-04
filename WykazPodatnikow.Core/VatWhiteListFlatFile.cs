@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using WykazPodatnikow.Data;
 using WykazPodatnikow.SharedLib;
 
@@ -10,17 +11,18 @@ namespace WykazPodatnikow.Core
 {
     public class VatWhiteListFlatFile
     {
-        private readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        private readonly FlatFileData flatFileData;
+        private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private static  FlatFileData flatFileData;
 
-        public VatWhiteListFlatFile(string PathToJson)
+        public static async Task LoadFlatFileAsync(string PathToJson)
         {
             if (!File.Exists(PathToJson))
                 throw new System.Exception("Json file not found");
 
             try
             {
-                flatFileData = JsonSerializer.Deserialize<FlatFileData>(File.ReadAllText(PathToJson), JsonSerializerOptions);
+                using FileStream s = new FileStream(PathToJson, FileMode.Open, FileAccess.Read);
+                flatFileData = await JsonSerializer.DeserializeAsync<FlatFileData>(s, JsonSerializerOptions);
             }
             catch (System.Exception)
             {

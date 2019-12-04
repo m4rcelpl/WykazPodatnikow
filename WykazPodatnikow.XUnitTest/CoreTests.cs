@@ -18,7 +18,8 @@ namespace WykazPodatnikow.XUnitTest
             try
             {
                 vatWhiteList = new VatWhiteList(new HttpClient());
-                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"20191121.json");
+                vatWhiteListFlatFile = new VatWhiteListFlatFile();
+                VatWhiteListFlatFile.LoadFlatFileAsync("20191121.json").Wait();
             }
             catch (Exception)
             {
