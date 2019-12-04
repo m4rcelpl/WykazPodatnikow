@@ -42,6 +42,8 @@ FlatFile.NotFound //Para nip + numer konta nie została odnaleziona w pliku
 
 Ze względu na ograniczenia API, zaleca się najpierw sprawdzenie rachunku w pliku płaskim. Jeśli rachunek nie zostanie odnaleziony to można przejść do drugiej metody która zwraca już konkretne dane z bazy ministerstwa.
 
+Z uwagi na rozmiar pliku json i ilość obiektów obecnie skupiam się na optymalizacji pamięci. Pierwszym krokiem ku temu jest wydzielenie funkcji ładującej plik. Teraz sama funkcja jest statyczna i ładuje plik w strumieniu. Dzięki czemu można ładować plik raz dziennie a nie za każdym requestem jak poprzenio. 
+
 Przykład:
 
 ```csharp
@@ -53,7 +55,7 @@ class CheckInFlatFile
     {
         try
         {
-            vatWhiteListFlatFile = new VatWhiteListFlatFile(@"C:\file\20191021.json");
+            vatWhiteListFlatFile = new VatWhiteListFlatFile();
         }
         catch (Exception)//Jeśli plik nie istnieje zostanie rzucony wyjątek
         {
@@ -63,7 +65,10 @@ class CheckInFlatFile
 
     public void CheckInFlatFile()
     {
-        FlatFile result = vatWhiteListFlatFile.IsInFlatFile("4356579386", "20721233708680000022663112");
+
+        VatWhiteListFlatFile.LoadFlatFileAsync(@"C:\file\20191021.json");
+
+        FlatFile result = vatWhiteListFlatFile.IsInFlatFile("4356579386", "20721233708680000022663112").Wait();
 
         switch (result)
             {
@@ -172,7 +177,9 @@ private static async System.Threading.Tasks.Task Main(string[] args)
             try
             {
                 vatWhiteList = new VatWhiteList(new HttpClient());
-                vatWhiteListFlatFile = new VatWhiteListFlatFile(@"c:\Users\m4rce\OneDrive\Programowanie\Git\WykazPodatnikow\WykazPodatnikow.XUnitTest\20191021.json");
+                vatWhiteListFlatFile = new VatWhiteListFlatFile();
+
+                await VatWhiteListFlatFile.LoadFlatFileAsync(@"C:\file\20191021.json");
             }
             catch (Exception ex)
             {
