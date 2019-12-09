@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>WykazPodatnikow.Standard</id>
-    <version>1.1.5</version>
+    <version>1.1.7</version>
     <authors>Marcel G.</authors>
     <owners>Marcel G.</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

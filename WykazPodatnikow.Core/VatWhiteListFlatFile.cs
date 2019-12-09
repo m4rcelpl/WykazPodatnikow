@@ -12,7 +12,7 @@ namespace WykazPodatnikow.Core
     public class VatWhiteListFlatFile
     {
         private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        private static  FlatFileData flatFileData;
+        public static  FlatFileData flatFileData;
 
         public static async Task LoadFlatFileAsync(string PathToJson)
         {
@@ -52,6 +52,9 @@ namespace WykazPodatnikow.Core
 
             if (!nip.IsValidNIP())
                 return FlatFile.InvalidNip;
+
+            if (string.IsNullOrEmpty(bankAccount) || string.IsNullOrWhiteSpace(bankAccount) || bankAccount?.Length < 26)
+                return FlatFile.InvalidBankAccount;
 
             switch (CheckInBody(bankAccount))
             {

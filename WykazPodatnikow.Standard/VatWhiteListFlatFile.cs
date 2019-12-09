@@ -11,7 +11,7 @@ namespace WykazPodatnikow.Standard
 {
     public class VatWhiteListFlatFile
     {
-        private static FlatFileData flatFileData;
+        public static FlatFileData flatFileData;
 
         public static Task LoadFlatFileAsync(string PathToJson)
         {
@@ -63,6 +63,9 @@ namespace WykazPodatnikow.Standard
 
             if (!nip.IsValidNIP())
                 return FlatFile.InvalidNip;
+
+            if (string.IsNullOrEmpty(bankAccount) || string.IsNullOrWhiteSpace(bankAccount) || bankAccount?.Length < 26)
+                return FlatFile.InvalidBankAccount;
 
             switch (CheckInBody(bankAccount))
             {
