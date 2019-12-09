@@ -58,7 +58,7 @@ namespace WykazPodatnikow.Standard
         public FlatFile IsInFlatFile(string nip, string bankAccount)
         {
 
-            if(flatFileData.skrotypodatnikowczynnych == null || flatFileData.skrotypodatnikowczynnych.Count <= 0)
+            if (!(flatFileData?.skrotypodatnikowczynnych?.Count >= 0))
                 throw new System.Exception("Json file is not loaded. Use first LoadFlatFileAsync()");
 
             if (!nip.IsValidNIP())
