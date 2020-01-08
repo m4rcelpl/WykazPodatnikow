@@ -12,7 +12,7 @@ namespace WykazPodatnikow.Core
     public class VatWhiteListFlatFile
     {
         private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        public static  FlatFileData flatFileData;
+        public static FlatFileData flatFileData;
 
         public static async Task LoadFlatFileAsync(string PathToJson)
         {
@@ -78,33 +78,25 @@ namespace WykazPodatnikow.Core
             }
 
             string bankBranchNumber = bankAccount.Substring(2, 8);
-            string maskToCompare = string.Empty;
 
             foreach (var item in flatFileData.maski)
             {
                 if (bankBranchNumber.Equals(item.Substring(2, 8), StringComparison.OrdinalIgnoreCase))
                 {
-                    maskToCompare = item;
-                    break;
+                    int IndexFrom = item.IndexOf("Y");
+                    int range = item.Count(p => p.Equals('Y'));
+                    string VirtualAccount = Regex.Replace(item, "Y\\w*Y", bankAccount.Substring(IndexFrom, range));
+
+                    FlatFile checkResult = CheckInBody(VirtualAccount);
+
+                    if (checkResult == FlatFile.NotFound)
+                        continue;
+                    else
+                        return checkResult;                  
                 }
             }
 
-            if (string.IsNullOrEmpty(maskToCompare))
-                return FlatFile.NotFound;
-
-            int IndexFrom = maskToCompare.IndexOf("Y");
-            int range = maskToCompare.Count(p => p.Equals('Y'));
-            string VirtualAccount = Regex.Replace(maskToCompare, "Y\\w*Y", bankAccount.Substring(IndexFrom, range));
-
-            return (CheckInBody(VirtualAccount)) switch
-            {
-                FlatFile.FoundInActiveVatPayer => FlatFile.FoundInActiveVatPayer,
-                FlatFile.FoundInExemptVatPayer => FlatFile.FoundInExemptVatPayer,
-                FlatFile.InvalidNip => FlatFile.InvalidNip,
-                FlatFile.InvalidBankAccount => FlatFile.InvalidBankAccount,
-                FlatFile.NotFound => FlatFile.NotFound,
-                _ => FlatFile.NotFound,
-            };
+            return FlatFile.NotFound;
 
             FlatFile CheckInBody(string account)
             {

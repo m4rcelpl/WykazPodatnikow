@@ -57,7 +57,6 @@ namespace WykazPodatnikow.Standard
 
         public FlatFile IsInFlatFile(string nip, string bankAccount)
         {
-
             if (!(flatFileData?.skrotypodatnikowczynnych?.Count >= 0))
                 throw new System.Exception("Json file is not loaded. Use first LoadFlatFileAsync()");
 
@@ -95,43 +94,25 @@ namespace WykazPodatnikow.Standard
             {
                 if (bankBranchNumber.Equals(item.Substring(2, 8), StringComparison.OrdinalIgnoreCase))
                 {
-                    maskToCompare = item;
-                    break;
+                    int IndexFrom = item.IndexOf("Y");
+                    int range = item.Count(p => p.Equals('Y'));
+                    string VirtualAccount = Regex.Replace(item, "Y\\w*Y", bankAccount.Substring(IndexFrom, range));
+
+                    FlatFile checkResult = CheckInBody(VirtualAccount);
+
+                    if (checkResult == FlatFile.NotFound)
+                        continue;
+                    else
+                        return checkResult;
                 }
             }
 
-            if (string.IsNullOrEmpty(maskToCompare))
-                return FlatFile.NotFound;
-
-            int IndexFrom = maskToCompare.IndexOf("Y");
-            int range = maskToCompare.Count(p => p.Equals('Y'));
-            string VirtualAccount = Regex.Replace(maskToCompare, "Y\\w*Y", bankAccount.Substring(IndexFrom, range));
-
-            switch (CheckInBody(VirtualAccount))
-            {
-                case FlatFile.FoundInActiveVatPayer:
-                    return FlatFile.FoundInActiveVatPayer;
-
-                case FlatFile.FoundInExemptVatPayer:
-                    return FlatFile.FoundInExemptVatPayer;
-
-                case FlatFile.InvalidNip:
-                    return FlatFile.InvalidNip;
-
-                case FlatFile.InvalidBankAccount:
-                    return FlatFile.InvalidBankAccount;
-
-                case FlatFile.NotFound:
-                    return FlatFile.NotFound;
-
-                default:
-                    return FlatFile.NotFound;
-            }
+            return FlatFile.NotFound;
 
             FlatFile CheckInBody(string account)
             {
                 string hash = (flatFileData.naglowek.datagenerowaniadanych + nip + account).SHA512(Convert.ToInt32(flatFileData.naglowek.liczbatransformacji));
-               
+
                 foreach (var item in flatFileData.skrotypodatnikowczynnych)
                 {
                     if (item.Equals(hash, StringComparison.OrdinalIgnoreCase))
